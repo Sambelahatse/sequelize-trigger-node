@@ -3,55 +3,23 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Emprunteur extends Model{
-
+  class emprunteur extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
       // define association here
     }
-
   }
-  Emprunteur.init({
-    ID: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    NomEmprunteur: {
-      type: DataTypes.STRING(50),
-      allowNull: false
-    },
-    PrenomEmprunteur: {
-      type: DataTypes.STRING(100),
-      allowNull: true
-    },
-    AdresseEmprunteur: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    },
-    TelephoneEmprunteur: {
-      type: DataTypes.STRING(15),
-      allowNull: false
-    },
-    EmailEmprunteur: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    }
+  emprunteur.init({
+    nom: DataTypes.STRING,
+    prenom: DataTypes.STRING,
+    adresse: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Emprunteur',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "ID" },
-        ]
-      },
-    ]
+    modelName: 'emprunteur',
   });
-  return Emprunteur;
-
+  return emprunteur;
 };

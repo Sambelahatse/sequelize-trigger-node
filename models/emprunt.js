@@ -1,66 +1,27 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('emprunt', {
-    IdEmprunt: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    ExemplaireID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'exemplaire',
-        key: 'ID'
-      }
-    },
-    EmprunteurID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'emprunteur',
-        key: 'ID'
-      }
-    },
-    DateEmprunt: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
-    },
-    DateRetour: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class emprunt extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
     }
+  }
+  emprunt.init({
+    idExemplaire: DataTypes.INTEGER,
+    idEmprunteur: DataTypes.INTEGER,
+    nombreEmprunt: DataTypes.INTEGER,
+    dateEmprunt: DataTypes.DATE,
+    dateRetour: DataTypes.DATE
   }, {
     sequelize,
-    tableName: 'emprunt',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "IdEmprunt" },
-          { name: "ExemplaireID" },
-          { name: "EmprunteurID" },
-        ]
-      },
-      {
-        name: "FKEmprunt887790",
-        using: "BTREE",
-        fields: [
-          { name: "ExemplaireID" },
-        ]
-      },
-      {
-        name: "FKEmprunt328197",
-        using: "BTREE",
-        fields: [
-          { name: "EmprunteurID" },
-        ]
-      },
-    ]
+    modelName: 'emprunt',
   });
+  return emprunt;
 };
