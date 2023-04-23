@@ -71,7 +71,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner h2">
-                <p>Journal sur le livre</p>
+                <p>Gestion de livre</p>
               </div>
               <div class="icon">
                 <i class="fa fa-book"></i>
@@ -84,7 +84,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <p>Journal sur l'exemplaire</p>
+                <p>Gestion d'exemplaire</p>
               </div>
               <div class="icon">
                 <i class="fa fa-book-reader"></i>
@@ -99,7 +99,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <p>Journal sur l'emprunteur</p>
+                <p>Gestion d'emprunteur</p>
               </div>
               <div class="icon">
                 <i class="fa fa-user-alt"></i>
@@ -113,7 +113,7 @@
             <div class="small-box bg-danger">
               <div class="inner">
 
-                <p>Journal sur l'emprunt</p>
+                <p>Gestion d'emprunt</p>
               </div>
               <div class="icon">
                 <i class="fa fa-cogs"></i>
@@ -137,22 +137,22 @@
                 <ul class="nav flex-column">
                   <li class="nav-item">
                     <a href="#" class="nav-link">
-                      Livres <span class="float-right badge bg-primary"><%= livre %></span>
+                      <%= livre > 1 ? 'Livres' : 'Livre' %><span class="float-right badge bg-primary"><%= livre %></span>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="#" class="nav-link">
-                      Exempaires <span class="float-right badge bg-info"><%= exemplaire %></span>
+                      <%= exemplaire > 1 ? 'Exempaires' : 'Exemplaire' %> <span class="float-right badge bg-info"><%= exemplaire %></span>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="#" class="nav-link">
-                      Emprunteurs <span class="float-right badge bg-success"><%= emprunteur %></span>
+                      <%= emprunteur > 1 ? 'Emprunteurs' : 'Emprunteur' %> <span class="float-right badge bg-success"><%= emprunteur %></span>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="#" class="nav-link">
-                      Emprunts <span class="float-right badge bg-danger"><%= emprunt %></span></span>
+                      <%= emprunt > 1 ? 'Emprunts' : 'Emprunt' %> <span class="float-right badge bg-danger"><%= emprunt %></span></span>
                     </a>
                   </li>
                 </ul>
@@ -165,174 +165,6 @@
     </section>
     <!-- /.content -->
   </div>
-
-
-<!--MODALS-->
-<div class="modal fade" id="livre-modal">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal_title">Journal de mise à jour de livres</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="example1" class="table table-bordered accent-dark table-hover accent-fuchsia shadow-sm">
-          <thead>
-            <tr>
-              <th>ID Livre</th>
-              <th>Ancien titre</th>
-              <th>Nouveau titre</th>
-              <th>Action</th>
-              <th>Date de mise à jour</th>
-              <th>Utilisateur</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for(let i = 0; i < livre_audits.length; i++) {%>
-              <th scope="row" class="text-center"><%= livre_audits[i].idLvre %></th>
-              <td><%= livre_audits[i].ancienTitreLivre %></td>
-              <td><%= livre_audits[i].nouvelTitreLivre %></td>
-              <td><%= livre_audits[i].action %></td>
-              <td><%= moment(livre_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>
-              <td><%= livre_audits[i].utilisateur %></td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="exemplaire-modal">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal_title">Journal de mise à jour d'exemplaire</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="example3" class="table table-bordered accent-dark table-hover accent-fuchsia">
-          <thead>
-            <tr>
-              <th>ID Exemplaire</th>
-              <th>Ancien Nombre</th>
-              <th>Nouveau Nombre</th>
-              <th>Action</th>
-              <th>Date de mise à jour</th>
-              <th>Utilisateur</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for(let i = 0; i < exemplaire_audits.length; i++) {%>
-              <th scope="row" class="text-center"><%= exemplaire_audits[i].idExemplaire %></th>
-              <td><%= exemplaire_audits[i].ancienNombre %></td>
-              <td><%= exemplaire_audits[i].nouveauNombre %></td>
-              <td><%= exemplaire_audits[i].action %></td>
-              <td><%= moment(exemplaire_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>
-              <td><%= exemplaire_audits[i].utilisateur %></td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="emprunteur-modal">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal_title">Journal de mise à jour d'emprunteur</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="example4" class="table table-bordered accent-dark table-hover accent-fuchsia">
-          <thead>
-            <tr>
-              <th>ID Emprunteur</th>
-              <th>Ancien Nom</th>
-              <th>Nouveau Nom</th>
-              <th>Action</th>
-              <th>Date de mise à jour</th>
-              <th>Utilisateur</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for(let i = 0; i < emprunteur_audits.length; i++) {%>
-              <th scope="row" class="text-center"><%= emprunteur_audits[i].idEmprunteur %></th>
-              <td><%= emprunteur_audits[i].ancienNom %></td>
-              <td><%= emprunteur_audits[i].nouveauNom %></td>
-              <td><%= emprunteur_audits[i].action %></td>
-              <td><%= moment(emprunteur_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>
-              <td><%= emprunteur_audits[i].utilisateur %></td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="emprunt-modal">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal_title">Journal de mise à jour d'emprunt</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="example5" class="table table-bordered accent-dark table-hover accent-fuchsia">
-          <thead>
-            <tr>
-              <th>ID Emprunt</th>
-              <th>ID Exemplaire</th>
-              <th>ID Emprunteur</th>
-              <th>Date Emprunt</th>
-              <th>A Date Retour</th>
-              <th>N Date Retour</th>
-              <th>Action</th>
-              <th>Date de mise à jour</th>
-              <th>Utilisateur</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for(let i = 0; i < emprunt_audits.length; i++) {%>
-              <th scope="row" class="text-center"><%= emprunt_audits[i].idEmprunt %></th>
-              <td><%= emprunt_audits[i].idExemplaire %></td>
-              <td><%= emprunt_audits[i].idEmprunteur %></td>
-              <td><%= moment(emprunt_audits[i].dateEmprunt).format("DD-MM-YYYY") %></td>
-              <td><%= moment(emprunt_audits[i].AncienDateRetour).format("DD-MM-YYYY") %></td>
-              <td><%= moment(emprunt_audits[i].NouvelDateRetour).format("DD-MM-YYYY") %></td>
-              <td><%= emprunt_audits[i].action %></td>
-              <td><%= moment(emprunt_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>
-              <td><%= emprunt_audits[i].utilisateur %></td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
 
   <!-- /.content-wrapper -->
   <%- include('./includes/footer.ejs') %>

@@ -1,10 +1,6 @@
 <%- include('./includes/header.ejs') %>
 <div class="wrapper">
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="./adminlte/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
+  
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -43,7 +39,7 @@
     </a>
 
     <!-- Sidebar -->
-    <%- include('./includes/sidebar') %>
+    <%- include('./includes/sidebar_exemplaire') %>
     <!-- /.sidebar -->
   </aside>
 
@@ -54,19 +50,18 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Tableau de bord</h1>
+            <h1 class="m-0">Exemplaire</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Accueil</a></li>
-              <li class="breadcrumb-item active">Tableau de bord</li>
+              <li class="breadcrumb-item active">Exemplaire</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -74,8 +69,8 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Livres</h3>
-                <button data-toggle="modal" data-target="#add-livre-modal" class="btn btn-outline-success shadow-lg float-right"><i class="fas fa-plus"></i> Ajouter livre</button>
+                <h3 class="card-title">Exemplaire</h3>
+                <button data-target="#add-exemplaire-modal" onclick="addExemplairefunction()" data-toggle="modal" class="btn btn-outline-success shadow-sm float-right"><i class="fas fa-plus"></i> Nouveau</button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -83,26 +78,26 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Titre</th>
-                      <th>Auteur</th>
-                      <th>Editeur</th>
-                      <th>Date de Parution</th>
+                      <th>Titre du livre</th>
+                      <th>Nombre d'exemplaire</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <% for(let i = 0; i < livres.length; i++) {%>
-                    <tr id="<%= `row-id-${livres[i].id}` %>">
-                      <th scope="row"><%= i+1 %></th>
-                      <td><%= livres[i].TitreLivre %></td>
-                      <td><%= livres[i].AuteurLivre %></td>
-                      <td><%= livres[i].EditeurLivre %></td>
-                      <td><%= livres[i].DateParution %></td>
-                      <td class='text-center'>
-                        <button class="btn"><i class="fa fa-edit text-warning"></i></button>
-                        <button class="btn"><i class="fa fa-trash text-danger"></i></button>
-                      </td>
-                    </tr>
+                      <% for(let it = 0; it < exemplaires.length; it++) {%>
+                        <% if (exemplaires[it].idLivre == livres[i].id) { %>
+                          <tr id="row-id-<%= exemplaires[it].id %>">
+                            <th scope="row" class="text-center"><%= exemplaires[it].id %></th>
+                            <td><%= livres[i].TitreLivre %></td>
+                            <td><%= exemplaires[it].nombreExemplaire %></td>
+                            <td class='text-center'>
+                              <button type="button" data-target="#add-exemplaire-modal" data-toggle="modal" class="btn " onclick="handleActionEdit('<%=`row-id-${exemplaires[it].id}`%>')"><i class="fa fa-edit text-yellow"></i></button>
+                              <button type="button" data-target="#delete-exemplaire-modal" data-toggle="modal" class="btn " onclick="handleActionDelete('<%=`row-id-${exemplaires[it].id}`%>')"><i class="fa fa-trash text-red"></i></button>
+                            </td>
+                          </tr>
+                        <% } %>
+                      <% } %>
                     <% } %>
                   </tbody>
                 </table>
@@ -117,45 +112,60 @@
     <!-- /.content -->
   </div>
 
-  <div class="modal fade" id="add-livre-modal">
+  <!--EXEMPLAIRE FORM MODAL-->
+  <div class="modal fade" id="add-exemplaire-modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Ajouter Livre</h4>
+          <h4 class="modal-title" id="modal_title">Ajouter Exemplaire</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
             <!-- form start -->
-            <form>
-              <div class="card-body">
+              <div class="container add-menu">
                 <div class="form-group">
-                  <label for="titreLivre">Titre du livre</label>
-                  <input type="text" name="TitreLivre" class="form-control" id="titreLivre" placeholder="Saisir le titre du livre">
+                  <label for="idLivre">Choisir le Livre</label>
+                  <select class="form-control select2" name="idLivre" id="idLivre" style="width: 100%;">
+                    <% for(let it = 0; it < livres.length; it++) {%>
+                    <option value=<%= livres[it].id %>><%= livres[it].TitreLivre %></option>
+                    <% } %>
+                  </select>
                 </div>
                 <div class="form-group">
-                  <label for="Auteur">Auteur du livre</label>
-                  <input type="text" name="AuteurLivre" class="form-control" id="Auteur" placeholder="Saisir l'auteur">
-                </div>
-                
-                <div class="form-group">
-                  <label for="Editeur">Editeur du livre</label>
-                  <input type="text" name="EditeurLivre" class="form-control" id="Editeur" placeholder="Saisir l'éditeur">
-                </div>
-
-                <div class="form-group">
-                  <label for="DateParution">Date de parution</label>
-                  <input type="date" name="DateParution" class="form-control" id="DateParution">
+                  <label for="exampleInputEmail1">Nombre de l'exemplaire</label>
+                  <input class="form-control" id="nombreExemplaire" name="nombreExemplaire" type="number" placeholder="input your price here...">
                 </div>
               </div>
-              <!-- /.card-body -->
-        </div>
+          </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fermer <i class="far fa-close"></i></button>
-          <button type="button" class="btn btn-outline-success">Sauvegarder <i class="fa fa-save"></i></button>
+          <button type="submit" id="buttonInsert" class="btn btn-outline-success " onclick="handleInsertMenu()">Sauvegarder <i class="fa fa-save"></i></button>
+          <button type="submit" id="buttonEdit" class="btn btn-outline-success ">Valider la modification <i class="fa fa-save"></i></button>
         </div>
-      </form>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal fade" id="delete-exemplaire-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal_title">Suppression</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h3>Êtes-vous sûre de supprimer?</h3>
+          <input class="form-control" type="hidden" id="id" placeholder="Menu Name">
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-secondary btn-sm w-25" data-dismiss="modal">Non <i class="far fa-close"></i></button>
+          <button type="submit" id="buttonDelete" class="btn btn-outline-danger btn-sm w-25">Oui <i class="fa fa-trash"></i></button>
+        </div>
       </div>
       <!-- /.modal-content -->
     </div>
@@ -163,12 +173,15 @@
   </div>
 
   <!-- /.content-wrapper -->
+  
   <%- include('./includes/footer.ejs') %>
+  <script src="./js/scriptExemplaire.js"></script>
   <script>
     $(function () {
       $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        "responsive": true, 
+        "lengthChange": false, 
+        "autoWidth": false,
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
       $('#example2').DataTable({
         "paging": true,
@@ -187,14 +200,6 @@
         timer: 3000
       });
 
-
-      $('.toastsDefaultAutohide').click(function() {
-        $(document).Toasts('create', {
-          title: 'Toast Title',
-          class: 'bg-success',
-          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-        })
-      });
 
     });
   </script>

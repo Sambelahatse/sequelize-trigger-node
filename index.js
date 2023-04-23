@@ -42,192 +42,142 @@ app.get('/api/livre/:id', jsonParser, async(req, res) => {
     res.send(dataLivre)
 })
 
-  // UPDATE
-app.put('/api/livre/:id', jsonParser, async(req,res) => {
-    try{
-      const dataLivre = await Livre.findByPk(req.params.id)
-      dataLivre.name = req.body.TitreLivre,
-      dataLivre.AuteurLivre = req.body.AuteurLivre,
-      dataLivre.EditeurLivre = req.body.EditeurLivre,
-      dataLivre.DateParutionLivre = req.body.DateParutionLivre
-      await dataLivre.save()
-      res.status(202).send(dataLivre)
-    }catch(error){
-      res.status(422).send('UNABLE TO UPDATE DATA')
-    }
+// UPDATE
+app.put('/api/livre/update/:id', jsonParser, async(req,res) => {
+  try{
+    const dataLivre = await Livre.findByPk(req.params.id)
+    dataLivre.TitreLivre = req.body.TitreLivre,
+    dataLivre.AuteurLivre = req.body.AuteurLivre,
+    dataLivre.EditeurLivre = req.body.EditeurLivre,
+    dataLivre.DateParution = req.body.DateParution
+    await dataLivre.save()
+    res.status(202).send(dataLivre)
+  }catch(error){
+    res.status(422).send('UNABLE TO UPDATE DATA')
+  }
 })
 
   // DELETE
 app.delete('/api/livre/delete/:id', async (req, res) => {
     try{
       const dataLivre = await Livre.findByPk(req.params.id)
-      dataLivre.destroy()
+      const dataExemplaire = await exemplaire.findOne({where:{idLivre: req.params.id}})
+      if (dataExemplaire){
+        dataExemplaire.destroy()
+        dataLivre.destroy()
+      }
       res.status(202).send('DELETED')
     }catch(error){
       res.status(422).send('UNPROCESSABLE')
     }
 })
 
+              /** EXEMPLAIRE API */
+// CREATE
+app.post('/api/exemplaire/add', jsonParser, async(req,res) => {
+  try {
+      const dataExemplaire = await exemplaire.create({
+        idLivre: req.body.idLivre,
+        nombreExemplaire: req.body.nombreExemplaire,
+      })
+      res.status(201).send(dataExemplaire)
+  } catch (error) {
+    res.status(422).send('UNABLE TO INSERT DATA')
+  }
+})
+
+//READ
+app.get('/api/exemplaire', jsonParser, async(req, res) => {
+  const dataExemplaire = await exemplaire.findAll()
+  res.send(dataExemplaire)
+})
+
+//READ ONE BY PK
+app.get('/api/exemplaire/:id', jsonParser, async(req, res) => {
+  const dataExemplaire = await exemplaire.findByPk(req.params.id)
+  res.send(dataExemplaire)
+})
+
+// UPDATE
+app.put('/api/exemplaire/update/:id', jsonParser, async(req,res) => {
+  try{
+    const dataExemplaire = await exemplaire.findByPk(req.params.id)
+    dataExemplaire.idLivre = req.body.idLivre,
+    dataExemplaire.nombreExemplaire = req.body.nombreExemplaire
+    await dataExemplaire.save()
+    res.status(202).send(dataExemplaire)
+  }catch(error){
+    res.status(422).send('UNABLE TO UPDATE DATA')
+  }
+})
+
+// DELETE
+app.delete('/api/exemplaire/delete/:id', async (req, res) => {
+  try{
+    const dataExemplaire = await exemplaire.findByPk(req.params.id)
+    const dataEmprunt = await emprunt.findOne({where:{idExemplaire: req.params.id}})
+    if (dateEmprunt){
+      dataEmprunt.destroy()
+      dataExemplaire.destroy()
+    }
+    res.status(202).send('DELETED')
+  }catch(error){
+    res.status(422).send('UNPROCESSABLE')
+  }
+})
+
 
                 /**Emprunteur API */
 // CREATE
-app.post('/api/livre/add', jsonParser, async(req,res) => {
+app.post('/api/emprunteur/add', jsonParser, async(req,res) => {
   try {
-      const dataLivre = await Livre.create({
-        TitreLivre: req.body.TitreLivre,
-        AuteurLivre: req.body.AuteurLivre,
-        EditeurLivre: req.body.EditeurLivre,
-        DateParution: req.body.DateParution
+      const dataEmprunteur = await emprunteur.create({
+        nom: req.body.nom,
+        prenom: req.body.prenom,
+        adresse: req.body.adresse
       })
-      res.status(201).send(dataLivre)
+      res.status(201).send(dataEmprunteur)
   } catch (error) {
     res.status(422).send('UNABLE TO INSERT DATA')
   }
 })
 
 //READ
-app.get('/api/livre', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findAll()
-  res.send(dataLivre)
+app.get('/api/emprunteur', jsonParser, async(req, res) => {
+  const dataEmprunteur = await emprunteur.findAll()
+  res.send(dataEmprunteur)
 })
 
 //READ ONE BY PK
-app.get('/api/livre/:id', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findByPk(req.params.id)
-  res.send(dataLivre)
+app.get('/api/emprunteur/:id', jsonParser, async(req, res) => {
+  const dataEmprunteur = await emprunteur.findByPk(req.params.id)
+  res.send(dataEmprunteur)
 })
 
 // UPDATE
-app.put('/api/livre/:id', jsonParser, async(req,res) => {
+app.put('/api/emprunteur/update/:id', jsonParser, async(req,res) => {
   try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.name = req.body.TitreLivre,
-    dataLivre.AuteurLivre = req.body.AuteurLivre,
-    dataLivre.EditeurLivre = req.body.EditeurLivre,
-    dataLivre.DateParutionLivre = req.body.DateParutionLivre
-    await dataLivre.save()
-    res.status(202).send(dataLivre)
+    const dataEmprunteur = await emprunteur.findByPk(req.params.id)
+    dataEmprunteur.nom = req.body.nom,
+    dataEmprunteur.prenom = req.body.prenom,
+    dataEmprunteur.adresse = req.body.adresse
+    await dataEmprunteur.save()
+    res.status(202).send(dataEmprunteur)
   }catch(error){
     res.status(422).send('UNABLE TO UPDATE DATA')
   }
 })
 
 // DELETE
-app.delete('/api/livre/delete/:id', async (req, res) => {
+app.delete('/api/emprunteur/delete/:id', async (req, res) => {
   try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.destroy()
-    res.status(202).send('DELETED')
-  }catch(error){
-    res.status(422).send('UNPROCESSABLE')
-  }
-})
-
-
-                /**Exemplaire API */
-// CREATE
-app.post('/api/livre/add', jsonParser, async(req,res) => {
-  try {
-      const dataLivre = await Livre.create({
-        TitreLivre: req.body.TitreLivre,
-        AuteurLivre: req.body.AuteurLivre,
-        EditeurLivre: req.body.EditeurLivre,
-        DateParution: req.body.DateParution
-      })
-      res.status(201).send(dataLivre)
-  } catch (error) {
-    res.status(422).send('UNABLE TO INSERT DATA')
-  }
-})
-
-//READ
-app.get('/api/livre', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findAll()
-  res.send(dataLivre)
-})
-
-//READ ONE BY PK
-app.get('/api/livre/:id', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findByPk(req.params.id)
-  res.send(dataLivre)
-})
-
-// UPDATE
-app.put('/api/livre/:id', jsonParser, async(req,res) => {
-  try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.name = req.body.TitreLivre,
-    dataLivre.AuteurLivre = req.body.AuteurLivre,
-    dataLivre.EditeurLivre = req.body.EditeurLivre,
-    dataLivre.DateParutionLivre = req.body.DateParutionLivre
-    await dataLivre.save()
-    res.status(202).send(dataLivre)
-  }catch(error){
-    res.status(422).send('UNABLE TO UPDATE DATA')
-  }
-})
-
-// DELETE
-app.delete('/api/livre/delete/:id', async (req, res) => {
-  try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.destroy()
-    res.status(202).send('DELETED')
-  }catch(error){
-    res.status(422).send('UNPROCESSABLE')
-  }
-})
-
-
-                /**Emprunt API */
-// CREATE
-app.post('/api/livre/add', jsonParser, async(req,res) => {
-  try {
-      const dataLivre = await Livre.create({
-        TitreLivre: req.body.TitreLivre,
-        AuteurLivre: req.body.AuteurLivre,
-        EditeurLivre: req.body.EditeurLivre,
-        DateParution: req.body.DateParution
-      })
-      res.status(201).send(dataLivre)
-  } catch (error) {
-    res.status(422).send('UNABLE TO INSERT DATA')
-  }
-})
-
-//READ
-app.get('/api/livre', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findAll()
-  res.send(dataLivre)
-})
-
-//READ ONE BY PK
-app.get('/api/livre/:id', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findByPk(req.params.id)
-  res.send(dataLivre)
-})
-
-// UPDATE
-app.put('/api/livre/:id', jsonParser, async(req,res) => {
-  try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.name = req.body.TitreLivre,
-    dataLivre.AuteurLivre = req.body.AuteurLivre,
-    dataLivre.EditeurLivre = req.body.EditeurLivre,
-    dataLivre.DateParutionLivre = req.body.DateParutionLivre
-    await dataLivre.save()
-    res.status(202).send(dataLivre)
-  }catch(error){
-    res.status(422).send('UNABLE TO UPDATE DATA')
-  }
-})
-
-// DELETE
-app.delete('/api/livre/delete/:id', async (req, res) => {
-  try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.destroy()
-    res.status(202).send('DELETED')
+    const dataEmprunteur = await emprunteur.findByPk(req.params.id)
+    const dataEmprunt = await emprunt.findOne({where:{idEmprunteur: req.params.id}})
+    if (dataEmprunt){
+      dataEmprunt.destroy()
+      dataEmprunteur.destroy() 
+    }
+    res.status(202).send('Suppression avec succès!')
   }catch(error){
     res.status(422).send('UNPROCESSABLE')
   }
@@ -235,59 +185,59 @@ app.delete('/api/livre/delete/:id', async (req, res) => {
 
                 /**Emprunt API */
 // CREATE
-app.post('/api/livre/add', jsonParser, async(req,res) => {
+app.post('/api/emprunt/add', jsonParser, async(req,res) => {
   try {
-      const dataLivre = await Livre.create({
-        TitreLivre: req.body.TitreLivre,
-        AuteurLivre: req.body.AuteurLivre,
-        EditeurLivre: req.body.EditeurLivre,
-        DateParution: req.body.DateParution
+      const dataEmprunt = await emprunt.create({
+        idExemplaire: req.body.idExemplaire,
+        idEmprunteur: req.body.idEmprunteur,
+        nombreEmprunt: req.body.nombreEmprunt,
+        dateEmprunt: req.body.dateEmprunt,
+        dateRetour: req.body.dateRetour
       })
-      res.status(201).send(dataLivre)
+      res.status(201).send(dataEmprunt)
   } catch (error) {
     res.status(422).send('UNABLE TO INSERT DATA')
   }
 })
 
 //READ
-app.get('/api/livre', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findAll()
-  res.send(dataLivre)
+app.get('/api/emprunt', jsonParser, async(req, res) => {
+  const dataEmprunt = await emprunt.findAll()
+  res.send(dataEmprunt)
 })
 
 //READ ONE BY PK
-app.get('/api/livre/:id', jsonParser, async(req, res) => {
-  const dataLivre = await Livre.findByPk(req.params.id)
-  res.send(dataLivre)
+app.get('/api/emprunt/:id', jsonParser, async(req, res) => {
+  const dataEmprunt = await emprunt.findByPk(req.params.id)
+  res.send(dataEmprunt)
 })
 
 // UPDATE
-app.put('/api/livre/:id', jsonParser, async(req,res) => {
+app.put('/api/emprunt/update/:id', jsonParser, async(req,res) => {
   try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.name = req.body.TitreLivre,
-    dataLivre.AuteurLivre = req.body.AuteurLivre,
-    dataLivre.EditeurLivre = req.body.EditeurLivre,
-    dataLivre.DateParutionLivre = req.body.DateParutionLivre
-    await dataLivre.save()
-    res.status(202).send(dataLivre)
+    const dataEmprunt = await emprunt.findByPk(req.params.id)
+    dataEmprunt.idExemplaire =  req.body.idExemplaire,
+    dataEmprunt.idEmprunteur =  req.body.idEmprunteur,
+    dataEmprunt.nombreEmprunt =  req.body.nombreEmprunt,
+    dataEmprunt.dateEmprunt =  req.body.dateEmprunt,
+    dataEmprunt.dateRetour =  req.body.dateRetour
+    await dataEmprunt.save()
+    res.status(202).send(dataEmprunt)
   }catch(error){
     res.status(422).send('UNABLE TO UPDATE DATA')
   }
 })
 
 // DELETE
-app.delete('/api/livre/delete/:id', async (req, res) => {
+app.delete('/api/emprunt/delete/:id', async (req, res) => {
   try{
-    const dataLivre = await Livre.findByPk(req.params.id)
-    dataLivre.destroy()
+    const dataEmprunt = await emprunt.findByPk(req.params.id)
+    dataEmprunt.destroy()
     res.status(202).send('DELETED')
   }catch(error){
     res.status(422).send('UNPROCESSABLE')
   }
 })
-
-
 
 // SUPERUSER
 
@@ -339,13 +289,20 @@ app.get('/api/emprunt_audit', jsonParser, async(req, res) => {
                       /** ADMIN */
 //Home
 app.get('/', async(req, res) => {
-
-  const resp = await fetch('http://localhost:4000/api/livre')
-  const livre = await resp.json()
+  const count_livre = await fetch('http://localhost:4000/api/livre_count')
+  const livre_count = await count_livre.json();
+  const count_exemplaire = await fetch('http://localhost:4000/api/exemplaire_count')
+  const exemplaire_count = await count_exemplaire.json();
+  const count_emprunteur = await fetch('http://localhost:4000/api/emprunteur_count')
+  const emprunteur_count = await count_emprunteur.json();
+  const count_emprunt = await fetch('http://localhost:4000/api/emprunt_count')
+  const emprunt_count = await count_emprunt.json();
   app.locals.moment = moment;
-  res.render('admin/index', {
-    livres: livre,
-
+  res.render('admin/home', {
+    livre: livre_count,
+    exemplaire: exemplaire_count,
+    emprunteur: emprunteur_count,
+    emprunt: emprunt_count
   })
 })
 
@@ -362,12 +319,14 @@ app.get('/livre', async(req, res) => {
 
 //Exemplaire
 app.get('/exemplaire', async(req, res) => {
-
-  const resp = await fetch('http://localhost:4000/api/livre')
-  const livre = await resp.json()
+  const resp = await fetch('http://localhost:4000/api/exemplaire')
+  const liv = await fetch('http://localhost:4000/api/livre')
+  const exemplaire = await resp.json()
+  const livre = await liv.json()
   app.locals.moment = moment
-  res.render('admin/livre', {
-    livres: livre,
+  res.render('admin/exemplaire', {
+    exemplaires: exemplaire,
+    livres: livre
   })
 })
 
@@ -375,17 +334,25 @@ app.get('/exemplaire', async(req, res) => {
 app.get('/emprunteur', async (req, res) => {
   const resp = await fetch('http://localhost:4000/api/emprunteur')
   const data = await resp.json()
-  res.render('admin/emprunteur', { 
-    livres: data
+  res.render('admin/emprunteur', {
+      emprunteurs: data
   })
 })
+
 
 // Emprunt
 app.get('/emprunt', async (req, res) => {
   const resp = await fetch('http://localhost:4000/api/emprunt')
   const data = await resp.json()
+  const resp2 = await fetch('http://localhost:4000/api/emprunteur')
+  const data2 = await resp2.json()
+  const resp3 = await fetch('http://localhost:4000/api/exemplaire')
+  const data3 = await resp3.json()
+  app.locals.moment = moment;
   res.render('admin/emprunt', { 
-    livres: data
+    emprunts: data,
+    emprunteurs: data2,
+    exemplaires: data3
   })
 })
 
