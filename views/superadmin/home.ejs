@@ -192,7 +192,7 @@
           <tbody>
             <% for(let i = 0; i < livre_audits.length; i++) {%>
               <th scope="row" class="text-center"><%= livre_audits[i].idLvre %></th>
-              <td><%= livre_audits[i].ancienTitreLivre %></td>
+              <td><%= livre_audits[i].ancienTitreLivre == "" ? "Aucun ancien titre" : livre_audits[i].ancienTitreLivre %></td>
               <td><%= livre_audits[i].nouvelTitreLivre %></td>
               <td><%= livre_audits[i].action %></td>
               <td><%= moment(livre_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>
@@ -232,7 +232,7 @@
           <tbody>
             <% for(let i = 0; i < exemplaire_audits.length; i++) {%>
               <th scope="row" class="text-center"><%= exemplaire_audits[i].idExemplaire %></th>
-              <td><%= exemplaire_audits[i].ancienNombre %></td>
+              <td><%= exemplaire_audits[i].ancienNombre == null ? "Pas d'ancien nombre" : exemplaire_audits[i].ancienNombre %></td>
               <td><%= exemplaire_audits[i].nouveauNombre %></td>
               <td><%= exemplaire_audits[i].action %></td>
               <td><%= moment(exemplaire_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>
@@ -272,7 +272,7 @@
           <tbody>
             <% for(let i = 0; i < emprunteur_audits.length; i++) {%>
               <th scope="row" class="text-center"><%= emprunteur_audits[i].idEmprunteur %></th>
-              <td><%= emprunteur_audits[i].ancienNom %></td>
+              <td><%= emprunteur_audits[i].ancienNom == null ? "Pas d'ancien nom" : emprunteur_audits[i].ancienNom %></td>
               <td><%= emprunteur_audits[i].nouveauNom %></td>
               <td><%= emprunteur_audits[i].action %></td>
               <td><%= moment(emprunteur_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>
@@ -318,7 +318,7 @@
               <td><%= emprunt_audits[i].idExemplaire %></td>
               <td><%= emprunt_audits[i].idEmprunteur %></td>
               <td><%= moment(emprunt_audits[i].dateEmprunt).format("DD-MM-YYYY") %></td>
-              <td><%= moment(emprunt_audits[i].AncienDateRetour).format("DD-MM-YYYY") %></td>
+              <td><%= emprunt_audits[i].AncienDateRetour == null ? "Pas d'ancien date de retour" : moment(emprunt_audits[i].AncienDateRetour).format("DD-MM-YYYY") %></td>
               <td><%= moment(emprunt_audits[i].NouvelDateRetour).format("DD-MM-YYYY") %></td>
               <td><%= emprunt_audits[i].action %></td>
               <td><%= moment(emprunt_audits[i].date).format("HH:mm:ss, DD-MM-YYYY") %></td>

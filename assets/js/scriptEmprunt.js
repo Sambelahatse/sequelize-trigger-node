@@ -42,6 +42,7 @@ const handleActionEdit = (elementId) => {
         dateRetour: dateRetour.value
       })
     })
+
     location.reload()
   }
 

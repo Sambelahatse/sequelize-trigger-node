@@ -24,6 +24,12 @@ app.post('/api/livre/add', jsonParser, async(req,res) => {
           EditeurLivre: req.body.EditeurLivre,
           DateParution: req.body.DateParution
         })
+
+        if(dataLivre){
+          console.log("Livre ajouté");
+      }
+      
+
         res.status(201).send(dataLivre)
     } catch (error) {
       res.status(422).send('UNABLE TO INSERT DATA')
